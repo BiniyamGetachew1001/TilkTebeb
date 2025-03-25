@@ -1,0 +1,22 @@
+{
+  "name": "TelkTibeb - Premium Bookstore & Business Plans",
+  "short_name": "TelkTibeb",
+  "description": "Access premium book summaries and business plans",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1C2526",
+  "theme_color": "#1C2526",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
