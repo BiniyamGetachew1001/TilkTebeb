@@ -6,16 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Briefcase, Lock } from "lucide-react"
-
-// Define types for business plan previews
-interface BusinessPlanPreview {
-  id: string
-  title: string
-  category: string
-  size: "small" | "medium" | "large"
-  description: string
-  isPremium: boolean
-}
+import { api, handleApiError } from "@/lib/api"
+import type { BusinessPlanPreview } from "@/lib/mock-data"
 
 export default function BusinessPlansPage() {
   const [businessPlans, setBusinessPlans] = useState<BusinessPlanPreview[]>([])
@@ -28,16 +20,10 @@ export default function BusinessPlansPage() {
     const fetchBusinessPlans = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch("/api/business-plans")
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch business plans")
-        }
-
-        const data = await response.json()
+        const data = await api.getBusinessPlans()
         setBusinessPlans(data)
       } catch (err) {
-        setError("Error loading business plans. Please try again later.")
+        setError(handleApiError(err))
         console.error("Error fetching business plans:", err)
       } finally {
         setIsLoading(false)

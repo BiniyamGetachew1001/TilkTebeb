@@ -22,6 +22,7 @@ import { SocialSharing } from "@/components/social-sharing"
 import { ComprehensionQuiz } from "@/components/comprehension-quiz"
 import { SimilarContent } from "@/components/recommendations/similar-content"
 import { trackUserActivity } from "@/lib/analytics"
+import { api, handleApiError } from "@/lib/api"
 
 export default function BookPage({ params }: { params: { slug: string } }) {
   const router = useRouter()
@@ -89,16 +90,7 @@ export default function BookPage({ params }: { params: { slug: string } }) {
           bookData = await getOfflineBook(params.slug)
         } else {
           // Fetch from API
-          const response = await fetch(`/api/books/${params.slug}`)
-
-          if (!response.ok) {
-            if (response.status === 404) {
-              throw new Error("Book not found")
-            }
-            throw new Error("Failed to fetch book details")
-          }
-
-          bookData = await response.json()
+          bookData = await api.getBookById(params.slug)
         }
 
         setBook(bookData)
@@ -122,7 +114,7 @@ export default function BookPage({ params }: { params: { slug: string } }) {
         setReadingSessionId(`reading-session-${Date.now()}`)
       } catch (err) {
         console.error("Error fetching book:", err)
-        setError("Error loading book details. Please try again later.")
+        setError(handleApiError(err))
       } finally {
         setIsLoading(false)
       }

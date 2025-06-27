@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookCard } from "@/components/book-card"
 import { Search } from "lucide-react"
+import { api, handleApiError } from "@/lib/api"
 import type { BookPreview } from "@/types/book"
 
 export default function BooksPage() {
@@ -21,17 +22,11 @@ export default function BooksPage() {
     const fetchBooks = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch("/api/books")
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch books")
-        }
-
-        const data = await response.json()
+        const data = await api.getBooks()
         setBooks(data)
         setFilteredBooks(data)
       } catch (err) {
-        setError("Error loading books. Please try again later.")
+        setError(handleApiError(err))
         console.error("Error fetching books:", err)
       } finally {
         setIsLoading(false)
