@@ -56,7 +56,7 @@ export function ThemeSelector() {
 
   useEffect(() => {
     // Load saved theme preference from localStorage
-    const savedTheme = localStorage.getItem("telktibeb-theme") || "default"
+    const savedTheme = localStorage.getItem("astewai-theme") || "default"
     setCurrentTheme(savedTheme)
     applyTheme(savedTheme)
   }, [])
@@ -78,7 +78,7 @@ export function ThemeSelector() {
     }
 
     // Save preference
-    localStorage.setItem("telktibeb-theme", theme)
+    localStorage.setItem("astewai-theme", theme)
   }
 
   const handleThemeChange = (theme: string) => {

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreditCard, Landmark, CheckCircle, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { api, handleApiError, userSessionManager } from "@/lib/api"
 
 interface CheckoutFormProps {
   plan: "base" | "small" | "medium" | "large"
@@ -63,31 +64,20 @@ export function CheckoutForm({ plan, amount, onSuccess, onCancel }: CheckoutForm
       setIsProcessing(true)
       setPaymentStatus("processing")
 
-      // In a real application, we would get the userId from authentication
-      const userId = "user-1" // Placeholder
+      // Get the current user from session
+      const currentUser = userSessionManager.getCurrentUser()
+      const userId = currentUser?.id || "user-1" // Fallback for demo
 
-      const response = await fetch("/api/payments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const data = await api.processPayment({
+        userId,
+        amount,
+        plan,
+        paymentMethod,
+        paymentDetails: {
+          phoneNumber: paymentMethod === "telebirr" ? phoneNumber : undefined,
+          accountNumber: paymentMethod === "cbe" ? accountNumber : undefined,
         },
-        body: JSON.stringify({
-          userId,
-          amount,
-          plan,
-          paymentMethod,
-          paymentDetails: {
-            phoneNumber: paymentMethod === "telebirr" ? phoneNumber : undefined,
-            accountNumber: paymentMethod === "cbe" ? accountNumber : undefined,
-          },
-        }),
       })
-
-      if (!response.ok) {
-        throw new Error("Payment processing failed")
-      }
-
-      const data = await response.json()
 
       // Store transaction ID for verification
       setTransactionId(data.transactionId)
@@ -140,24 +130,9 @@ export function CheckoutForm({ plan, amount, onSuccess, onCancel }: CheckoutForm
     try {
       setIsVerifying(true)
 
-      const response = await fetch("/api/payments/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          transactionId,
-          paymentMethod,
-        }),
-      })
+      const data = await api.verifyPayment(transactionId)
 
-      if (!response.ok) {
-        throw new Error("Payment verification failed")
-      }
-
-      const data = await response.json()
-
-      if (data.verified) {
+      if (data.success) {
         setPaymentStatus("success")
 
         toast({
@@ -184,7 +159,7 @@ export function CheckoutForm({ plan, amount, onSuccess, onCancel }: CheckoutForm
 
       toast({
         title: "Verification Failed",
-        description: "There was an error verifying your payment. Please try again.",
+        description: handleApiError(error),
         variant: "destructive",
       })
     } finally {

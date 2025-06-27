@@ -9,10 +9,14 @@ import { PersonalizedRecommendations } from "@/components/recommendations/person
 import { ChartContainer, ChartTitle, Chart, ChartTooltip } from "@/components/ui/chart"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts"
 import { Loader2, Calendar, BarChart2 } from "lucide-react"
+import { api, handleApiError, userSessionManager } from "@/lib/api"
+import type { UserAnalytics } from "@/lib/api"
 
 export default function AnalyticsPage() {
   const [userId, setUserId] = useState<string | null>(null)
+  const [analytics, setAnalytics] = useState<UserAnalytics | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // Mock data for charts
   const readingTimeData = [
@@ -36,11 +40,28 @@ export default function AnalyticsPage() {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
 
   useEffect(() => {
-    // In a real app, we would get the user ID from authentication
-    // For demo purposes, we'll use a mock user ID
-    const mockUserId = "user-123"
-    setUserId(mockUserId)
-    setIsLoading(false)
+    const fetchAnalytics = async () => {
+      try {
+        setIsLoading(true)
+        const currentUser = userSessionManager.getCurrentUser()
+
+        if (!currentUser) {
+          setError("Please log in to view analytics")
+          return
+        }
+
+        setUserId(currentUser.id)
+        const userAnalytics = await api.getUserAnalytics(currentUser.id)
+        setAnalytics(userAnalytics)
+      } catch (err) {
+        setError(handleApiError(err))
+        console.error("Error fetching analytics:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchAnalytics()
   }, [])
 
   if (isLoading) {
@@ -54,7 +75,17 @@ export default function AnalyticsPage() {
     )
   }
 
-  if (!userId) {
+  if (error) {
+    return (
+      <div className="container py-8 md:py-12">
+        <div className="text-center py-12">
+          <p className="text-destructive mb-4">{error}</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!userId || !analytics) {
     return (
       <div className="container py-8 md:py-12">
         <div className="text-center py-12">

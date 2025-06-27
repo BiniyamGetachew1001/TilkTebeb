@@ -3,7 +3,8 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, Shield, Lock, BookOpen } from "lucide-react"
+import { SecurityBadge } from "@/components/security-badge"
 
 export function HeroSection() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
@@ -14,40 +15,46 @@ export function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="glass dark:glass-dark p-8 rounded-2xl transform transition-all duration-500 hover:translate-y-[-5px]">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              Unlock Business Wisdom with Premium Summaries
+              Secure Digital Books, <br />No Downloads Required
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Get lifetime access to 200+ business book summaries and 20 free business ideas with a one-time payment.
+              Discover and purchase premium digital books with our secure reading platform. Complete protection for authors, seamless experience for readers.
             </p>
 
             <div className="space-y-4 mb-8">
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 gold-icon mt-0.5 flex-shrink-0" />
-                <p>Access 200+ premium business book summaries</p>
+                <Shield className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <p>100% secure reading - no downloads, complete protection</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 gold-icon mt-0.5 flex-shrink-0" />
-                <p>Get 20 free business ideas with detailed plans</p>
+                <BookOpen className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <p>Premium digital books with advanced reader features</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 gold-icon mt-0.5 flex-shrink-0" />
-                <p>Unlock premium business plans for different business sizes</p>
+                <Lock className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <p>Anti-piracy technology protects authors' work</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 gold-icon mt-0.5 flex-shrink-0" />
-                <p>Lifetime access with a one-time payment</p>
+                <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <p>30-day money-back guarantee</p>
               </div>
             </div>
 
+            <div className="flex flex-wrap gap-2 mb-8">
+              <SecurityBadge type="ssl" size="sm" />
+              <SecurityBadge type="secure" size="sm" />
+              <SecurityBadge type="guarantee" size="sm" />
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/signup">
+              <Link href="/books">
                 <Button size="lg" className="w-full sm:w-auto btn-hover">
-                  Get Started
+                  Browse Books
                 </Button>
               </Link>
-              <Link href="/pricing">
+              <Link href="/bundles">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto btn-hover">
-                  View Pricing
+                  View Bundles
                 </Button>
               </Link>
             </div>

@@ -58,8 +58,8 @@ export default function BooksPage() {
     <div className="container py-8 md:py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight mb-2">Book Summaries</h1>
-          <p className="text-muted-foreground">Access 200+ premium business book summaries with lifetime access</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-2">Digital Books</h1>
+          <p className="text-muted-foreground">Discover and purchase premium digital books - secure reading, no downloads</p>
         </div>
 
         <div className="w-full md:w-auto flex flex-col sm:flex-row gap-4">
@@ -127,6 +127,8 @@ export default function BooksPage() {
                 category={book.category}
                 rating={book.rating}
                 id={book.id}
+                price={book.price || 9.99}
+                isPurchased={book.isPurchased || false}
               />
             ))}
           </div>

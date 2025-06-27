@@ -1,4 +1,4 @@
-// Define book type without audio and progress tracking properties
+// Define book type for Astewai digital book platform
 export interface Book {
   id: string
   title: string
@@ -12,6 +12,13 @@ export interface Book {
   keyInsights?: string
   applications?: string
   isPremium?: boolean
+  price?: number
+  isPurchased?: boolean
+  publisher?: string
+  publishedDate?: string
+  isbn?: string
+  genre?: string
+  tableOfContents?: string[]
 }
 
 // Type for book preview/card display
@@ -22,5 +29,20 @@ export interface BookPreview {
   coverUrl: string
   category: string
   rating: number
+  price?: number
+  isPurchased?: boolean
+}
+
+// Type for book bundles/packs
+export interface BookBundle {
+  id: string
+  title: string
+  description: string
+  coverUrl: string
+  books: BookPreview[]
+  originalPrice: number
+  bundlePrice: number
+  savings: number
+  category: string
 }
 

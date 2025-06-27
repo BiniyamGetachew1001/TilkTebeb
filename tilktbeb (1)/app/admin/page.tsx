@@ -5,11 +5,16 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, BarChart, PieChart } from "@/components/ui/chart"
-import { BookOpen, Briefcase, Users, ShoppingCart } from "lucide-react"
+import { BookOpen, Briefcase, Users, ShoppingCart, Loader2 } from "lucide-react"
+import { api, handleApiError } from "@/lib/api"
+import type { AdminStats } from "@/lib/api"
 
 export default function AdminDashboard() {
   const router = useRouter()
   const [isAuthorized, setIsAuthorized] = useState(false)
+  const [stats, setStats] = useState<AdminStats | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     // Check if user is logged in as admin
@@ -20,11 +25,48 @@ export default function AdminDashboard() {
       router.push("/admin/login")
     } else {
       setIsAuthorized(true)
+      fetchAdminStats()
     }
   }, [router])
 
+  const fetchAdminStats = async () => {
+    try {
+      setIsLoading(true)
+      const adminStats = await api.getAdminStats()
+      setStats(adminStats)
+    } catch (err) {
+      setError(handleApiError(err))
+      console.error("Error fetching admin stats:", err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   if (!isAuthorized) {
     return null
+  }
+
+  if (isLoading) {
+    return (
+      <div className="container py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8">
+        <div className="text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <button onClick={fetchAdminStats} className="btn">
+            Retry
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -36,7 +78,7 @@ export default function AdminDashboard() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Books</p>
-              <p className="text-3xl font-bold">247</p>
+              <p className="text-3xl font-bold">{stats?.totalBooks || 0}</p>
             </div>
             <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
               <BookOpen className="h-6 w-6 text-primary" />
@@ -48,7 +90,7 @@ export default function AdminDashboard() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Business Plans</p>
-              <p className="text-3xl font-bold">54</p>
+              <p className="text-3xl font-bold">{stats?.totalBusinessPlans || 0}</p>
             </div>
             <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
               <Briefcase className="h-6 w-6 text-primary" />
@@ -60,7 +102,7 @@ export default function AdminDashboard() {
           <CardContent className="p-6 flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Users</p>
-              <p className="text-3xl font-bold">1,834</p>
+              <p className="text-3xl font-bold">{stats?.totalUsers.toLocaleString() || 0}</p>
             </div>
             <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
               <Users className="h-6 w-6 text-primary" />
@@ -71,8 +113,8 @@ export default function AdminDashboard() {
         <Card>
           <CardContent className="p-6 flex items-center justify-between">
             <div>
-              <p className="text-muted-foreground text-sm">Total Revenue</p>
-              <p className="text-3xl font-bold">$248,950</p>
+              <p className="text-muted-foreground text-sm">Revenue This Month</p>
+              <p className="text-3xl font-bold">${stats?.revenueThisMonth.toLocaleString() || 0}</p>
             </div>
             <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
               <ShoppingCart className="h-6 w-6 text-primary" />

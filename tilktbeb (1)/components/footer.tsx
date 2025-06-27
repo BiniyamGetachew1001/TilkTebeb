@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { BookOpen } from "lucide-react"
+// import { TrustIndicators } from "@/components/trust-indicators"
 
 export function Footer() {
   return (
@@ -9,35 +10,43 @@ export function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <BookOpen className="h-6 w-6 gold-icon" />
-              <span className="font-bold text-xl">TILkTBEB</span>
+              <span className="font-bold text-xl">Astewai</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Premium business book summaries and business plans with a one-time payment.
+              Secure digital book platform - read premium books online with complete protection.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Resources</h3>
+            <h3 className="font-semibold mb-4">Browse</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/books" className="text-sm text-muted-foreground hover:text-secondary transition-colors">
-                  Book Summaries
+                  Digital Books
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/business-plans"
+                  href="/bundles"
                   className="text-sm text-muted-foreground hover:text-secondary transition-colors"
                 >
-                  Business Plans
+                  Book Bundles
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/free-ideas"
+                  href="/blog"
                   className="text-sm text-muted-foreground hover:text-secondary transition-colors"
                 >
-                  Free Business Ideas
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/library"
+                  className="text-sm text-muted-foreground hover:text-secondary transition-colors"
+                >
+                  My Library
                 </Link>
               </li>
             </ul>
@@ -65,16 +74,21 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
+            <h3 className="font-semibold mb-4">Security & Legal</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/terms" className="text-sm text-muted-foreground hover:text-secondary transition-colors">
-                  Terms of Service
+                <Link href="/security" className="text-sm text-muted-foreground hover:text-secondary transition-colors">
+                  Security
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-sm text-muted-foreground hover:text-secondary transition-colors">
                   Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm text-muted-foreground hover:text-secondary transition-colors">
+                  Terms of Service
                 </Link>
               </li>
               <li>
@@ -87,7 +101,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} TILkTBEB. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Astewai. All rights reserved.</p>
           <div className="mt-4 md:mt-0 flex items-center gap-4">
             <Link href="#" className="text-muted-foreground hover:text-secondary">
               <span className="sr-only">Facebook</span>
@@ -145,6 +159,8 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* <TrustIndicators /> */}
     </footer>
   )
 }

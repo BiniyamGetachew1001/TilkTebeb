@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   BookOpen,
-  Briefcase,
+  Package,
   Home,
   Settings,
   User,
@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Menu,
+  FileText,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -57,23 +58,23 @@ export function Sidebar({ className }: SidebarProps) {
       icon: Home,
     },
     {
-      title: "Book Summaries",
+      title: "Books",
       href: "/books",
       icon: BookOpen,
     },
     {
-      title: "Business Plans",
-      href: "/business-plans",
-      icon: Briefcase,
+      title: "Book Bundles",
+      href: "/bundles",
+      icon: Package,
     },
     {
-      title: "Bookmarks",
-      href: "/bookmarks",
-      icon: Bookmark,
+      title: "Blog",
+      href: "/blog",
+      icon: FileText,
     },
     {
-      title: "Offline Library",
-      href: "/offline-library",
+      title: "My Library",
+      href: "/library",
       icon: Download,
     },
   ]

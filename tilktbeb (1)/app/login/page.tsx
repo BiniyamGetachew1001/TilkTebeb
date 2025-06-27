@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { BookOpen } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { api, handleApiError, authTokenManager, userSessionManager } from "@/lib/api"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -34,23 +35,19 @@ export default function LoginPage() {
     try {
       setIsLoading(true)
 
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
+      const userData = await api.login({ email, password })
 
-      if (!response.ok) {
-        throw new Error("Login failed")
+      // Store authentication data
+      if (userData.token) {
+        authTokenManager.setToken(userData.token)
       }
-
-      const userData = await response.json()
-
-      // In a real app, you would store the user data in a state management solution
-      // For now, we'll just use localStorage
-      localStorage.setItem("user", JSON.stringify(userData))
+      userSessionManager.setCurrentUser({
+        id: userData.id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        plan: userData.plan,
+      })
 
       toast({
         title: "Success",
@@ -63,7 +60,7 @@ export default function LoginPage() {
       console.error("Login error:", error)
       toast({
         title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
+        description: handleApiError(error),
         variant: "destructive",
       })
     } finally {

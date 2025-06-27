@@ -6,19 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, Building2, DollarSign, Users, ChevronRight } from "lucide-react"
-
-interface BusinessPlan {
-  id: string
-  title: string
-  category: string
-  size: "small" | "medium" | "large"
-  description: string
-  overview: string
-  marketAnalysis: string
-  financials: string
-  implementation: string
-  isPremium: boolean
-}
+import { api, handleApiError } from "@/lib/api"
+import type { BusinessPlan } from "@/lib/mock-data"
 
 export default function BusinessPlanPage({ params }: { params: { size: string; id: string } }) {
   const [plan, setPlan] = useState<BusinessPlan | null>(null)
@@ -31,27 +20,15 @@ export default function BusinessPlanPage({ params }: { params: { size: string; i
     const fetchBusinessPlan = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/business-plans/${params.id}`)
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error("Business plan not found")
-          }
-          throw new Error("Failed to fetch business plan details")
-        }
-
-        const data = await response.json()
+        const data = await api.getBusinessPlanById(params.id)
         setPlan(data)
 
         // Fetch similar plans
-        const similarResponse = await fetch(`/api/business-plans?size=${params.size}&limit=2`)
-        if (similarResponse.ok) {
-          const similarData = await similarResponse.json()
-          // Filter out the current plan
-          setSimilarPlans(similarData.filter((p: any) => p.id !== params.id))
-        }
+        const similarData = await api.getBusinessPlans({ size: params.size })
+        // Filter out the current plan and limit to 2
+        setSimilarPlans(similarData.filter((p: any) => p.id !== params.id).slice(0, 2))
       } catch (err) {
-        setError("Error loading business plan. Please try again later.")
+        setError(handleApiError(err))
         console.error("Error fetching business plan:", err)
       } finally {
         setIsLoading(false)

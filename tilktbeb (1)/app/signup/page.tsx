@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { BookOpen } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { api, handleApiError, authTokenManager, userSessionManager } from "@/lib/api"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -66,26 +67,37 @@ export default function SignupPage() {
     try {
       setIsSubmitting(true)
 
-      // In a real application, you would:
-      // 1. Send the user data to your API
-      // 2. Create the user account
-      // 3. Handle authentication
+      const userData = await api.register({
+        firstName,
+        lastName,
+        email,
+        password,
+      })
 
-      // For demo purposes, we'll simulate a successful signup
-      setTimeout(() => {
-        toast({
-          title: "Account Created",
-          description: "Your account has been created successfully. Proceeding to checkout.",
-        })
+      // Store authentication data
+      if (userData.token) {
+        authTokenManager.setToken(userData.token)
+      }
+      userSessionManager.setCurrentUser({
+        id: userData.id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        plan: userData.plan,
+      })
 
-        // Redirect to checkout with the selected plan
-        router.push(`/checkout?plan=${selectedPlan}`)
-      }, 1500)
+      toast({
+        title: "Account Created",
+        description: "Your account has been created successfully. Proceeding to checkout.",
+      })
+
+      // Redirect to checkout with the selected plan
+      router.push(`/checkout?plan=${selectedPlan}`)
     } catch (error) {
       console.error("Signup error:", error)
       toast({
         title: "Signup Failed",
-        description: "There was an error creating your account. Please try again.",
+        description: handleApiError(error),
         variant: "destructive",
       })
     } finally {

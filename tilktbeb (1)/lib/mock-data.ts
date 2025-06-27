@@ -11,6 +11,7 @@ export const mockBooks: Book[] = [
     rating: 4.4,
     pages: 242,
     language: "English",
+    price: 12.99,
     summary: `
       <p>The Psychology of Money explores how money moves around in an economy and how people behave with it. The author, Morgan Housel, provides timeless lessons on wealth, greed, and happiness.</p>
       
@@ -69,6 +70,7 @@ export const mockBooks: Book[] = [
     rating: 4.9,
     pages: 320,
     language: "English",
+    price: 13.99,
     summary: `
       <p>Atomic Habits offers a proven framework for improving every day. James Clear reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results.</p>
       
@@ -127,6 +129,7 @@ export const mockBooks: Book[] = [
     rating: 4.7,
     pages: 464,
     language: "English",
+    price: 14.99,
     summary: `
       <p>Sapiens: A Brief History of Humankind is a book by Yuval Noah Harari that explores the history and impact of Homo sapiens on the world. It traces the evolution of our species from the emergence of Homo sapiens in Africa to our current status as the dominant force on Earth.</p>
       
@@ -185,6 +188,7 @@ export const mockBooks: Book[] = [
     rating: 4.8,
     pages: 224,
     language: "English",
+    price: 12.99,
     summary: `
       <p>Zero to One presents at once an optimistic view of the future of progress in America and a new way of thinking about innovation: it starts by learning to ask the questions that lead you to find value in unexpected places.</p>
 
@@ -243,6 +247,7 @@ export const mockBooks: Book[] = [
     rating: 4.7,
     pages: 320,
     language: "English",
+    price: 11.99,
     summary: `
       <p>Good to Great presents the findings of a five-year study by Jim Collins and his research team. The team identified a set of companies that made the leap from good results to great results and sustained those results for at least fifteen years.</p>
 
@@ -301,6 +306,7 @@ export const mockBooks: Book[] = [
     rating: 4.6,
     pages: 336,
     language: "English",
+    price: 10.99,
     summary: `
       <p>The Lean Startup introduces a methodology for developing businesses and products that aims to shorten product development cycles and rapidly discover if a proposed business model is viable.</p>
 

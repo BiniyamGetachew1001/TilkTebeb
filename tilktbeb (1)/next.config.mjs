@@ -13,6 +13,33 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Frontend-only optimizations
+  output: 'standalone', // For containerized deployments
+  trailingSlash: false,
+  poweredByHeader: false,
+  compress: true,
+
+  // Image optimization for external sources
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000', // Django development server
+      },
+    ],
+  },
+
+  // Environment variables for build-time configuration
+  env: {
+    NEXT_PUBLIC_APP_NAME: 'Astewai',
+    NEXT_PUBLIC_APP_VERSION: '1.0.0',
+  },
+
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,

@@ -17,8 +17,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "TelkTibeb - Business Book Summaries & Premium Business Plans",
-  description: "Access 200+ business book summaries and premium business plans with a one-time payment.",
+  title: "Astewai - Secure Digital Book Platform",
+  description: "Discover and purchase digital books securely. Read premium books online with our advanced reader - no downloads, complete protection.",
   manifest: "/manifest.json",
     generator: 'v0.dev'
 }

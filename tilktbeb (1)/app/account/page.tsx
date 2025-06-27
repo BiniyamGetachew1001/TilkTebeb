@@ -1,11 +1,73 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BookOpen, Briefcase, Clock, Download } from "lucide-react"
+import { BookOpen, Briefcase, Clock, Download, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { api, handleApiError, userSessionManager } from "@/lib/api"
+import type { UserProfile, BookPreview } from "@/lib/api"
 
 export default function AccountPage() {
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [bookmarks, setBookmarks] = useState<BookPreview[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setIsLoading(true)
+        const currentUser = userSessionManager.getCurrentUser()
+
+        if (!currentUser) {
+          setError("Please log in to view your account")
+          return
+        }
+
+        // Fetch user profile and bookmarks
+        const [profile, userBookmarks] = await Promise.all([
+          api.getUserProfile(currentUser.id),
+          api.getUserBookmarks(currentUser.id)
+        ])
+
+        setUserProfile(profile)
+        setBookmarks(userBookmarks)
+      } catch (err) {
+        setError(handleApiError(err))
+        console.error("Error fetching user data:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchUserData()
+  }, [])
+  if (isLoading) {
+    return (
+      <div className="container py-8 md:py-12">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container py-8 md:py-12">
+        <div className="text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <Link href="/login">
+            <Button>Go to Login</Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="container py-8 md:py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -26,11 +88,17 @@ export default function AccountPage() {
             </CardHeader>
             <CardContent className="flex flex-col items-center text-center">
               <Avatar className="h-24 w-24 mb-4">
-                <AvatarFallback className="text-2xl bg-primary/10 text-primary">JD</AvatarFallback>
+                <AvatarFallback className="text-2xl bg-primary/10 text-primary">
+                  {userProfile?.user.firstName?.[0]}{userProfile?.user.lastName?.[0]}
+                </AvatarFallback>
               </Avatar>
-              <h2 className="text-xl font-bold">John Doe</h2>
-              <p className="text-muted-foreground">john.doe@example.com</p>
-              <div className="mt-4 p-2 bg-primary/10 text-primary rounded-full text-sm font-medium">Premium Member</div>
+              <h2 className="text-xl font-bold">
+                {userProfile?.user.firstName} {userProfile?.user.lastName}
+              </h2>
+              <p className="text-muted-foreground">{userProfile?.user.email}</p>
+              <div className="mt-4 p-2 bg-primary/10 text-primary rounded-full text-sm font-medium capitalize">
+                {userProfile?.user.plan} Member
+              </div>
             </CardContent>
             <CardFooter className="flex justify-center">
               <Link href="/settings">
