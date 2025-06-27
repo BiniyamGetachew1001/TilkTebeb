@@ -356,6 +356,97 @@ export const mockBooks: Book[] = [
     `,
     isPremium: true,
   },
+  // Free books
+  {
+    id: "public-domain-classic-1",
+    title: "The Art of War",
+    author: "Sun Tzu",
+    coverUrl: "/placeholder.svg?height=240&width=180",
+    category: "Strategy",
+    rating: 4.8,
+    pages: 96,
+    language: "English",
+    price: 0,
+    summary: `
+      <p>The Art of War is an ancient Chinese military treatise dating from the Late Spring and Autumn Period. The work, which is attributed to the ancient Chinese military strategist Sun Tzu, is composed of 13 chapters.</p>
+
+      <h3>Key Insights:</h3>
+
+      <p><strong>1. Know Yourself and Your Enemy</strong></p>
+      <p>If you know the enemy and know yourself, you need not fear the result of a hundred battles.</p>
+
+      <p><strong>2. Win Without Fighting</strong></p>
+      <p>The supreme excellence is to subdue the enemy without fighting.</p>
+
+      <p><strong>3. Speed and Timing</strong></p>
+      <p>Rapidity is the essence of war: take advantage of the enemy's unreadiness, make your way by unexpected routes, and attack unguarded spots.</p>
+
+      <p><strong>4. Adaptability</strong></p>
+      <p>Water shapes its course according to the nature of the ground; the soldier works out his victory in relation to the foe he is facing.</p>
+    `,
+    isPremium: false,
+    isFree: true,
+  },
+  {
+    id: "public-domain-classic-2",
+    title: "Think and Grow Rich",
+    author: "Napoleon Hill",
+    coverUrl: "/placeholder.svg?height=240&width=180",
+    category: "Self-Help",
+    rating: 4.7,
+    pages: 320,
+    language: "English",
+    price: 0,
+    summary: `
+      <p>Think and Grow Rich is a personal development and self-help book by Napoleon Hill. The book was inspired by a suggestion from Scottish-American businessman Andrew Carnegie.</p>
+
+      <h3>Key Insights:</h3>
+
+      <p><strong>1. Desire</strong></p>
+      <p>The starting point of all achievement is desire. Keep this constantly in mind. Weak desire brings weak results.</p>
+
+      <p><strong>2. Faith</strong></p>
+      <p>Faith is the head chemist of the mind. When faith is blended with the vibration of thought, the subconscious mind instantly picks up the vibration.</p>
+
+      <p><strong>3. Persistence</strong></p>
+      <p>Persistence is to the character of man as carbon is to steel.</p>
+
+      <p><strong>4. The Master Mind</strong></p>
+      <p>The coordination of knowledge and effort of two or more people, who work toward a definite purpose, in the spirit of harmony.</p>
+    `,
+    isPremium: false,
+    isFree: true,
+  },
+  {
+    id: "free-business-guide",
+    title: "Starting Your First Business",
+    author: "Astewai Team",
+    coverUrl: "/placeholder.svg?height=240&width=180",
+    category: "Entrepreneurship",
+    rating: 4.5,
+    pages: 150,
+    language: "English",
+    price: 0,
+    summary: `
+      <p>A comprehensive guide for first-time entrepreneurs, covering everything from idea validation to launching your business.</p>
+
+      <h3>Key Insights:</h3>
+
+      <p><strong>1. Idea Validation</strong></p>
+      <p>Before investing time and money, validate your business idea with potential customers.</p>
+
+      <p><strong>2. Market Research</strong></p>
+      <p>Understanding your target market is crucial for business success.</p>
+
+      <p><strong>3. Financial Planning</strong></p>
+      <p>Create realistic financial projections and understand your funding needs.</p>
+
+      <p><strong>4. Legal Structure</strong></p>
+      <p>Choose the right business structure for your specific situation.</p>
+    `,
+    isPremium: false,
+    isFree: true,
+  },
 ]
 
 // Convert to BookPreview format for listing pages

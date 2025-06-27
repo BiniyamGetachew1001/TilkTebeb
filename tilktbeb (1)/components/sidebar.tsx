@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   Menu,
   FileText,
+  Gift,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -61,6 +62,11 @@ export function Sidebar({ className }: SidebarProps) {
       title: "Books",
       href: "/books",
       icon: BookOpen,
+    },
+    {
+      title: "Free Books",
+      href: "/free-books",
+      icon: Gift,
     },
     {
       title: "Book Bundles",
@@ -116,6 +122,9 @@ export function Sidebar({ className }: SidebarProps) {
 
       {/* Sidebar */}
       <aside
+        id="main-navigation"
+        role="navigation"
+        aria-label="Main navigation"
         className={cn(
           "fixed top-0 left-0 z-40 h-full glass dark:glass-dark border-r border-white/10 transition-all duration-300 ease-in-out",
           isCollapsed ? "w-[70px]" : "w-[250px]",

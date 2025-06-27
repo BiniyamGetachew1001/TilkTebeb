@@ -7,43 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Search, Calendar, User, ArrowRight, Clock } from "lucide-react"
+import { api, handleApiError, type BlogPost } from "@/lib/api"
+import { MetaTags } from "@/components/seo/meta-tags"
+import { BlogCoverImage } from "@/components/optimized-image"
 
-interface BlogPost {
-  id: string
-  title: string
-  excerpt: string
-  author: string
-  publishedDate: string
-  readTime: number
-  category: string
-  coverImage: string
-  slug: string
-}
-
-// Mock data for blog posts
-const mockPosts: BlogPost[] = [
-  {
-    id: "1",
-    title: "The Future of Digital Reading: Why Security Matters",
-    excerpt: "Explore how secure digital reading platforms are revolutionizing the way we consume books while protecting authors' intellectual property.",
-    author: "Sarah Johnson",
-    publishedDate: "2024-01-15",
-    readTime: 5,
-    category: "Technology",
-    coverImage: "/placeholder.svg?height=200&width=400",
-    slug: "future-digital-reading-security"
-  },
-  {
-    id: "2",
-    title: "Author Interview: Building a Sustainable Writing Career",
-    excerpt: "We sit down with bestselling author Michael Chen to discuss the challenges and opportunities in today's publishing landscape.",
-    author: "Emma Davis",
-    publishedDate: "2024-01-12",
-    readTime: 8,
-    category: "Author Interview",
-    coverImage: "/placeholder.svg?height=200&width=400",
-    slug: "author-interview-michael-chen"
-  },
+// Additional mock posts for the listing page (these would come from API in production)
+const additionalMockPosts: BlogPost[] = [
   {
     id: "3",
     title: "5 Essential Writing Tips from Industry Professionals",
@@ -97,22 +66,32 @@ export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setPosts(mockPosts)
-      setIsLoading(false)
-    }, 1000)
-  }, [])
+    const fetchBlogPosts = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const blogPosts = await api.getBlogPosts({
+          category: selectedCategory !== "All" ? selectedCategory : undefined,
+          query: searchQuery || undefined
+        })
+        // Combine API posts with additional mock posts for demo
+        setPosts([...blogPosts, ...additionalMockPosts])
+      } catch (err) {
+        setError(handleApiError(err))
+        console.error("Error fetching blog posts:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.author.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || post.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+    fetchBlogPosts()
+  }, [selectedCategory, searchQuery])
+
+  // Since filtering is now handled by the API, we just use the posts directly
+  const filteredPosts = posts
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -122,8 +101,26 @@ export default function BlogPage() {
     })
   }
 
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Astewai Blog",
+    "description": "Insights on digital reading, publishing, and the future of books",
+    "url": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://astewai.com'}/blog`,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Astewai"
+    }
+  }
+
   return (
     <div className="container py-8 md:py-12">
+      <MetaTags
+        title="Blog - Digital Reading Insights & Publishing Trends"
+        description="Explore the latest insights on digital reading, secure publishing platforms, author interviews, and the future of books. Stay updated with Astewai's expert analysis."
+        canonical="/blog"
+        schema={blogSchema}
+      />
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold tracking-tight mb-4">Astewai Blog</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -172,6 +169,13 @@ export default function BlogPage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      ) : error ? (
+        <div className="text-center py-12">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
         </div>
       ) : (
         <>

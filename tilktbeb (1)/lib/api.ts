@@ -12,6 +12,7 @@ export const api = USE_MOCK_API ? MockApiService : ApiService
 // Re-export types for convenience
 export type { Book, BookPreview } from '@/types/book'
 export type { BusinessPlan, BusinessPlanPreview } from './mock-data'
+export type { BlogPost } from './blog-data'
 
 // Utility function to check if we're using mock API
 export const isUsingMockApi = () => USE_MOCK_API

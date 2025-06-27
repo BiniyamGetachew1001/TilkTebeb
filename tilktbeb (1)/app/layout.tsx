@@ -9,6 +9,9 @@ import { Sidebar } from "@/components/sidebar"
 import { OfflineDetector } from "@/components/offline-detector"
 import { Toaster } from "@/components/ui/toaster"
 import { ParticlesBackground } from "@/components/particles-background"
+import { ErrorBoundary } from "@/components/error-boundary"
+import { SkipLinks } from "@/components/accessibility/skip-links"
+import { PerformanceMonitor } from "@/components/performance-monitor"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,19 +38,25 @@ export default function RootLayout({
         <meta name="theme-color" content="#B1732E" />
       </head>
       <body className="font-sans">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <ParticlesBackground />
-          <div className="flex flex-col min-h-screen">
-            <Sidebar />
-            <div className="lg:ml-[70px] transition-all duration-300 ease-in-out flex-1 flex flex-col">
-              <Navbar showFullNav={false} />
-              <OfflineDetector />
-              <main className="flex-1">{children}</main>
-              <Footer />
+        <ErrorBoundary showDetails={true}>
+          <SkipLinks />
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ParticlesBackground />
+            <div className="flex flex-col min-h-screen">
+              <Sidebar />
+              <div className="lg:ml-[70px] transition-all duration-300 ease-in-out flex-1 flex flex-col">
+                <Navbar showFullNav={false} />
+                <OfflineDetector />
+                <main id="main-content" className="flex-1" tabIndex={-1}>
+                  {children}
+                </main>
+                <Footer />
+              </div>
             </div>
-          </div>
-          <Toaster />
-        </ThemeProvider>
+            <Toaster />
+            <PerformanceMonitor />
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

@@ -14,6 +14,7 @@ export interface Book {
   isPremium?: boolean
   price?: number
   isPurchased?: boolean
+  isFree?: boolean
   publisher?: string
   publishedDate?: string
   isbn?: string
@@ -31,6 +32,7 @@ export interface BookPreview {
   rating: number
   price?: number
   isPurchased?: boolean
+  isFree?: boolean
 }
 
 // Type for book bundles/packs

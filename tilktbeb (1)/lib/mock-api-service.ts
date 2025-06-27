@@ -1,11 +1,13 @@
 import type { Book, BookPreview } from "@/types/book"
 import type { BusinessPlan, BusinessPlanPreview } from "./mock-data"
-import { 
-  mockBooks, 
-  mockBookPreviews, 
-  mockBusinessPlans, 
-  mockBusinessPlanPreviews 
+import type { BlogPost } from "./blog-data"
+import {
+  mockBooks,
+  mockBookPreviews,
+  mockBusinessPlans,
+  mockBusinessPlanPreviews
 } from "./mock-data"
+import { mockBlogPosts } from "./blog-data"
 
 // Mock API service for development when Django backend is not available
 export class MockApiService {
@@ -62,6 +64,112 @@ export class MockApiService {
     }
     
     return book
+  }
+
+  // Free Books API methods
+  static async getFreeBooks(params?: {
+    category?: string
+    query?: string
+    sortBy?: "title" | "rating" | "author"
+    limit?: number
+  }): Promise<BookPreview[]> {
+    await this.delay()
+
+    let freeBooks = mockBookPreviews.filter(book => {
+      const fullBook = mockBooks.find(b => b.id === book.id)
+      return fullBook?.isFree || fullBook?.price === 0
+    })
+
+    if (params?.category && params.category !== "All") {
+      freeBooks = freeBooks.filter(
+        book => book.category.toLowerCase() === params.category!.toLowerCase()
+      )
+    }
+
+    if (params?.query) {
+      const searchQuery = params.query.toLowerCase()
+      freeBooks = freeBooks.filter(
+        book =>
+          book.title.toLowerCase().includes(searchQuery) ||
+          book.author.toLowerCase().includes(searchQuery) ||
+          book.category.toLowerCase().includes(searchQuery)
+      )
+    }
+
+    if (params?.sortBy) {
+      freeBooks.sort((a, b) => {
+        switch (params.sortBy) {
+          case "rating":
+            return b.rating - a.rating
+          case "author":
+            return a.author.localeCompare(b.author)
+          case "title":
+          default:
+            return a.title.localeCompare(b.title)
+        }
+      })
+    }
+
+    if (params?.limit) {
+      freeBooks = freeBooks.slice(0, params.limit)
+    }
+
+    return freeBooks
+  }
+
+  // Blog API methods
+  static async getBlogPosts(params?: {
+    category?: string
+    query?: string
+    limit?: number
+  }): Promise<BlogPost[]> {
+    await this.delay()
+
+    let filteredPosts = [...mockBlogPosts]
+
+    if (params?.category && params.category !== "All") {
+      filteredPosts = filteredPosts.filter(
+        post => post.category.toLowerCase() === params.category!.toLowerCase()
+      )
+    }
+
+    if (params?.query) {
+      const searchQuery = params.query.toLowerCase()
+      filteredPosts = filteredPosts.filter(
+        post =>
+          post.title.toLowerCase().includes(searchQuery) ||
+          post.excerpt.toLowerCase().includes(searchQuery) ||
+          post.author.toLowerCase().includes(searchQuery)
+      )
+    }
+
+    if (params?.limit) {
+      filteredPosts = filteredPosts.slice(0, params.limit)
+    }
+
+    return filteredPosts
+  }
+
+  static async getBlogPostBySlug(slug: string): Promise<BlogPost> {
+    await this.delay()
+
+    const post = mockBlogPosts.find(post => post.slug === slug)
+    if (!post) {
+      throw new Error(`Blog post with slug ${slug} not found`)
+    }
+
+    return post
+  }
+
+  static async getRelatedBlogPosts(currentSlug: string, limit: number = 3): Promise<BlogPost[]> {
+    await this.delay()
+
+    const currentPost = mockBlogPosts.find(post => post.slug === currentSlug)
+    if (!currentPost) return []
+
+    return mockBlogPosts
+      .filter(post => post.slug !== currentSlug && post.category === currentPost.category)
+      .slice(0, limit)
   }
 
   // Business Plans API methods

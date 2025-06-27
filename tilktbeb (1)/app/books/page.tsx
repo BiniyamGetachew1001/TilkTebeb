@@ -1,17 +1,21 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
 import { BookCard } from "@/components/book-card"
-import { Search } from "lucide-react"
+import { Search, Gift, Filter } from "lucide-react"
 import { api, handleApiError } from "@/lib/api"
 import type { BookPreview } from "@/types/book"
+import { ComponentErrorBoundary } from "@/components/error-boundary"
 
 export default function BooksPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("all")
+  const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all")
   const [books, setBooks] = useState<BookPreview[]>([])
   const [filteredBooks, setFilteredBooks] = useState<BookPreview[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -36,12 +40,20 @@ export default function BooksPage() {
     fetchBooks()
   }, [])
 
-  // Filter books based on search query and active category
+  // Filter books based on search query, active category, and price filter
   useEffect(() => {
     let result = [...books]
 
     if (activeCategory !== "all") {
       result = result.filter((book) => book.category.toLowerCase() === activeCategory.toLowerCase())
+    }
+
+    if (priceFilter !== "all") {
+      if (priceFilter === "free") {
+        result = result.filter((book) => book.isFree || (book.price !== undefined && book.price === 0))
+      } else if (priceFilter === "paid") {
+        result = result.filter((book) => !book.isFree && book.price !== undefined && book.price > 0)
+      }
     }
 
     if (searchQuery) {
@@ -52,7 +64,7 @@ export default function BooksPage() {
     }
 
     setFilteredBooks(result)
-  }, [books, searchQuery, activeCategory])
+  }, [books, searchQuery, activeCategory, priceFilter])
 
   return (
     <div className="container py-8 md:py-12">
@@ -60,6 +72,14 @@ export default function BooksPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-2">Digital Books</h1>
           <p className="text-muted-foreground">Discover and purchase premium digital books - secure reading, no downloads</p>
+          <div className="mt-3">
+            <Link href="/free-books">
+              <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200">
+                <Gift className="mr-1 h-3 w-3" />
+                Browse Free Books
+              </Badge>
+            </Link>
+          </div>
         </div>
 
         <div className="w-full md:w-auto flex flex-col sm:flex-row gap-4">
@@ -74,27 +94,49 @@ export default function BooksPage() {
             />
           </div>
 
-          <Tabs
-            defaultValue="all"
-            value={activeCategory}
-            onValueChange={setActiveCategory}
-            className="w-full sm:w-auto"
-          >
-            <TabsList className="bg-muted/50 p-1 rounded-full">
-              <TabsTrigger value="all" className="rounded-full">
-                All
-              </TabsTrigger>
-              <TabsTrigger value="finance" className="rounded-full">
-                Finance
-              </TabsTrigger>
-              <TabsTrigger value="productivity" className="rounded-full">
-                Productivity
-              </TabsTrigger>
-              <TabsTrigger value="entrepreneurship" className="rounded-full">
-                Entrepreneurship
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Tabs
+              defaultValue="all"
+              value={activeCategory}
+              onValueChange={setActiveCategory}
+              className="w-full sm:w-auto"
+            >
+              <TabsList className="bg-muted/50 p-1 rounded-full">
+                <TabsTrigger value="all" className="rounded-full">
+                  All
+                </TabsTrigger>
+                <TabsTrigger value="finance" className="rounded-full">
+                  Finance
+                </TabsTrigger>
+                <TabsTrigger value="productivity" className="rounded-full">
+                  Productivity
+                </TabsTrigger>
+                <TabsTrigger value="entrepreneurship" className="rounded-full">
+                  Entrepreneurship
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            <Tabs
+              defaultValue="all"
+              value={priceFilter}
+              onValueChange={(value) => setPriceFilter(value as "all" | "free" | "paid")}
+              className="w-full sm:w-auto"
+            >
+              <TabsList className="bg-muted/50 p-1 rounded-full">
+                <TabsTrigger value="all" className="rounded-full">
+                  All Books
+                </TabsTrigger>
+                <TabsTrigger value="free" className="rounded-full">
+                  <Gift className="mr-1 h-3 w-3" />
+                  Free
+                </TabsTrigger>
+                <TabsTrigger value="paid" className="rounded-full">
+                  Premium
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
         </div>
       </div>
 
@@ -117,8 +159,9 @@ export default function BooksPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredBooks.map((book) => (
+          <ComponentErrorBoundary componentName="Books Grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredBooks.map((book) => (
               <BookCard
                 key={book.id}
                 title={book.title}
@@ -129,9 +172,11 @@ export default function BooksPage() {
                 id={book.id}
                 price={book.price || 9.99}
                 isPurchased={book.isPurchased || false}
+                isFree={book.isFree || book.price === 0}
               />
-            ))}
-          </div>
+              ))}
+            </div>
+          </ComponentErrorBoundary>
 
           {filteredBooks.length === 0 && (
             <div className="text-center py-12">
