@@ -1,4 +1,4 @@
-import { Shield, Lock, CheckCircle, Star } from "lucide-react"
+import { Shield, Lock, Check, Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface SecurityBadgeProps {
@@ -20,7 +20,7 @@ export function SecurityBadge({ type, size = 'md', className = '' }: SecurityBad
       color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100'
     },
     verified: {
-      icon: CheckCircle,
+      icon: Check,
       text: 'Verified Platform',
       color: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100'
     },
@@ -30,7 +30,7 @@ export function SecurityBadge({ type, size = 'md', className = '' }: SecurityBad
       color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100'
     },
     guarantee: {
-      icon: CheckCircle,
+      icon: Check,
       text: '30-Day Guarantee',
       color: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100'
     }

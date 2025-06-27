@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { BookCard } from "@/components/book-card"
-import { Search, Gift, Filter } from "lucide-react"
+import { Search, Heart, Filter } from "lucide-react"
 import { api, handleApiError } from "@/lib/api"
 import type { BookPreview } from "@/types/book"
 import { ComponentErrorBoundary } from "@/components/error-boundary"
@@ -75,7 +75,7 @@ export default function BooksPage() {
           <div className="mt-3">
             <Link href="/free-books">
               <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200">
-                <Gift className="mr-1 h-3 w-3" />
+                <Heart className="mr-1 h-3 w-3" />
                 Browse Free Books
               </Badge>
             </Link>
@@ -128,7 +128,7 @@ export default function BooksPage() {
                   All Books
                 </TabsTrigger>
                 <TabsTrigger value="free" className="rounded-full">
-                  <Gift className="mr-1 h-3 w-3" />
+                  <Heart className="mr-1 h-3 w-3" />
                   Free
                 </TabsTrigger>
                 <TabsTrigger value="paid" className="rounded-full">

@@ -7,16 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { 
-  Search, 
-  Star, 
-  BookOpen, 
-  Download, 
+import {
+  Search,
+  Star,
+  BookOpen,
+  Download,
   Filter,
   SortAsc,
   Grid3X3,
   List,
-  Gift
+  Heart
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { api, handleApiError, type BookPreview } from "@/lib/api"
@@ -118,7 +118,7 @@ export default function FreeBooksPage() {
       {/* Header */}
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Gift className="h-8 w-8 text-primary" />
+          <Heart className="h-8 w-8 text-primary" />
           <h1 className="text-3xl font-bold tracking-tight">Free Books</h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

@@ -3,7 +3,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertTriangle, RefreshCw, Home, ArrowLeft } from "lucide-react"
+import { AlertCircle, RotateCcw, House, ArrowLeft } from "lucide-react"
 
 interface Props {
   children: ReactNode
@@ -82,7 +82,7 @@ export class ErrorBoundary extends Component<Props, State> {
           <Card className="w-full max-w-2xl">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
-                <AlertTriangle className="h-16 w-16 text-destructive" />
+                <AlertCircle className="h-16 w-16 text-destructive" />
               </div>
               <CardTitle className="text-2xl">Something went wrong</CardTitle>
             </CardHeader>
@@ -110,7 +110,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {/* Action buttons */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button onClick={this.handleRetry} className="flex items-center gap-2">
-                  <RefreshCw className="h-4 w-4" />
+                  <RotateCcw className="h-4 w-4" />
                   Try Again
                 </Button>
                 <Button variant="outline" onClick={this.handleGoBack} className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   Go Back
                 </Button>
                 <Button variant="outline" onClick={this.handleGoHome} className="flex items-center gap-2">
-                  <Home className="h-4 w-4" />
+                  <House className="h-4 w-4" />
                   Go Home
                 </Button>
               </div>
@@ -174,7 +174,7 @@ export function ComponentErrorBoundary({
       fallback={
         <div className="p-4 border border-destructive/20 rounded-lg bg-destructive/5">
           <div className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-4 w-4" />
+            <AlertCircle className="h-4 w-4" />
             <span className="text-sm font-medium">
               {componentName ? `${componentName} Error` : "Component Error"}
             </span>

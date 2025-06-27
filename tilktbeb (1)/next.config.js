@@ -3,7 +3,8 @@ const nextConfig = {
   // Enable experimental features for better performance
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Disable package imports optimization to fix lucide-react issues
+    // optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
 
   // Image optimization
@@ -24,8 +25,7 @@ const nextConfig = {
   //   enabled: process.env.ANALYZE === 'true',
   // },
 
-  // Performance optimizations
-  swcMinify: true,
+  // Performance optimizations (swcMinify is enabled by default in Next.js 13+)
   
   // Headers for better caching and security
   async headers() {
@@ -90,11 +90,11 @@ const nextConfig = {
       }
     }
 
-    // Tree shaking for lucide-react
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'lucide-react': 'lucide-react/dist/esm/icons',
-    }
+    // Tree shaking for lucide-react (disabled to fix import issues)
+    // config.resolve.alias = {
+    //   ...config.resolve.alias,
+    //   'lucide-react': 'lucide-react/dist/esm/icons',
+    // }
 
     return config
   },

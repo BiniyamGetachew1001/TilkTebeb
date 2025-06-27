@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/placeholder-logo.png" />
         <meta name="theme-color" content="#B1732E" />
       </head>
       <body className="font-sans">

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import {
   BookOpen,
   Package,
-  Home,
+  House,
   Settings,
   User,
   Bookmark,
@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   Menu,
   FileText,
-  Gift,
+  Heart,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -56,7 +56,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       title: "Home",
       href: "/",
-      icon: Home,
+      icon: House,
     },
     {
       title: "Books",
@@ -66,7 +66,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       title: "Free Books",
       href: "/free-books",
-      icon: Gift,
+      icon: Heart,
     },
     {
       title: "Book Bundles",

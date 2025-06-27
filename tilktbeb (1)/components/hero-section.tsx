@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, Shield, Lock, BookOpen } from "lucide-react"
+import { Check, Shield, Lock, BookOpen } from "lucide-react"
 import { SecurityBadge } from "@/components/security-badge"
 
 export function HeroSection() {
@@ -35,7 +35,7 @@ export function HeroSection() {
                 <p>Anti-piracy technology protects authors' work</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                 <p>30-day money-back guarantee</p>
               </div>
             </div>
